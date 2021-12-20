@@ -53,30 +53,30 @@ func fileExists(path string) bool {
 
 func main() {
 	filter := os.Args[1:]
-    fmt.Fprintf(os.Stderr, "filter: %v\n", filter)
+	fmt.Fprintf(os.Stderr, "filter: %v\n", filter)
 	reader, err := inputReader()
-    var total int
-    var skipped int
+	var total int
+	var skipped int
 
 	if err != nil {
-        log.Fatalf("failed to read: %s", err)
+		log.Fatalf("failed to read: %s", err)
 	}
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		txt := scanner.Text()
-        var skip bool
+		var skip bool
 		for _, f := range filter {
 			if strings.Contains(txt, f) {
 				skip = true
-                skipped++
+				skipped++
 				break
 			}
 		}
-			if skip {
-				continue
-			}
-            total++
-			fmt.Println(txt)
+		if skip {
+			continue
+		}
+		total++
+		fmt.Println(txt)
 	}
-    fmt.Fprintf(os.Stderr, "total: %d, skipped: %d\n", total, skipped)
+	fmt.Fprintf(os.Stderr, "total: %d, skipped: %d, remaining: %d\n", total, skipped, total-skipped)
 }
